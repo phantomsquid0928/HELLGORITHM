@@ -66,7 +66,7 @@ int main() {
 	hist[1] = 1;
 	visited[n] = 1;
 	int iscycle = 0;
-	bfs(n);
+	dfs(n);
 	for (int i = 1; i <= n; i++) {
 		for (auto t : nodes2) {
 			int temp = t[0];

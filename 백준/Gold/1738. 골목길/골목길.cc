@@ -75,17 +75,14 @@ int main() {
 			if (dist[temp] != 1000000000 && dist[next] > dist[temp] + val) {
 				dist[next] = dist[temp] + val;
 				hist[next] = temp;
-				if (i == n && visited[temp] == 1) {
-					iscycle = 1;
+				if (i == n && visited[next] == 1) {
+					cout << -1 << '\n';
+					return 0;
 				}
 			}
 		}
 	}
 	
-	if (iscycle == 1) {
-		cout << -1 << '\n';
-		return 0;
-	}
 	int last = n;
 	int j = n;
 //	for (auto t : cycle) {

@@ -20,20 +20,6 @@ void dfs(int node) {
 		}
 	}
 }
-void bfs(int node) {
-	queue<int> q;
-	q.push(node);
-	while (!q.empty()) {
-		int target = q.front();
-		q.pop();
-		for (auto t : nodes[target]) {
-			if (!visited[t.first]) {
-				visited[t.first] = 1;
-				q.push(t.first);
-			}
-		}
-	}
-}
 
 void print_ans(int t) {
 	if (t == 1) {
@@ -55,11 +41,11 @@ int main() {
 		cin >> a >> b >> c;
 		//nodes[a].push_back({b, c});
 		nodes[b].push_back({a, c});
-		nodes2.push_back({a, b, -c});
+		nodes2.push_back({a, b, c});
 	}
 	//memset(dist, 0x1f1f, sizeof(dist));
 	for (int i = 1; i <= n ;i++) {
-		dist[i] = 1000000000;
+		dist[i] = -1000000000;
 	}
 	dist[1] = 0;
 	
@@ -72,7 +58,7 @@ int main() {
 			int temp = t[0];
 			int next = t[1];
 			int val = t[2];
-			if (dist[temp] != 1000000000 && dist[next] > dist[temp] + val) {
+			if (dist[temp] != -1000000000 && dist[next] < dist[temp] + val) {
 				dist[next] = dist[temp] + val;
 				hist[next] = temp;
 				if (i == n && visited[next] == 1) {

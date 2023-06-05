@@ -52,7 +52,14 @@ bool dfs(int a, int mid) {
 	}
 	visited1d[a] = true;
 	for (auto t : reaches[a]) {
-		if (mid >= t[1]&&(match[t[0]] == -1 || dfs(match[t[0]], mid))) {
+		if (mid >= t[1] && match[t[0]] == -1) {
+			match[t[0]] = a;
+			//cout << "tt";
+			return true;
+		}
+	}
+	for (auto t : reaches[a]) {
+		if (mid >= t[1] && dfs(match[t[0]], mid)) {
 			match[t[0]] = a;
 			//cout << "tt";
 			return true;

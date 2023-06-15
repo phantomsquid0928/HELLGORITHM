@@ -1,4 +1,4 @@
-# [Gold II] 골목길 - 1738 
+# [Gold I] 골목길 - 1738 
 
 [문제 링크](https://www.acmicpc.net/problem/1738) 
 

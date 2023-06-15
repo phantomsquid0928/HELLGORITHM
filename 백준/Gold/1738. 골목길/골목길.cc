@@ -58,7 +58,7 @@ int main() {
 			int temp = t[0];
 			int next = t[1];
 			int val = t[2];
-			if (dist[temp] != -1000000000 && dist[next] < dist[temp] + val) {
+			if (dist[next] < dist[temp] + val) {
 				dist[next] = dist[temp] + val;
 				hist[next] = temp;
 				if (i == n && visited[next] == 1) {

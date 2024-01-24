@@ -1,17 +1,17 @@
+n, m = map(int, input().split())
 
-n, k = map(int, input().split())
-
-dict = {}
-res = []
+## dict == map
+a = []
+b = []
 for i in range(n):
-    t = str(input())
-    dict[t] = 1
-for i in range(k):
-    t = str(input())
-    if t in dict.keys():
-        res.append(t)
+    a.append(input())
+for i in range(m):
+    b.append(input())
 
-print(len(res))
+res = list(set(a).intersection(b))
+
 res.sort()
+print(len(res))
+
 for i in res:
     print(i)

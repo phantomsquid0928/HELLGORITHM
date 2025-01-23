@@ -4,7 +4,11 @@
 
 ### 성능 요약
 
-메모리: 66,884 KB, 시간: 6,754 ms, 코드길이: 1,215 Bytes
+메모리: 66,884 KB, 시간: 6,754 ms, 코드길이: 1,215 Bytes <- bfs
+
+dfs, permutation code is in file commit hist
+
+
 
 ### 제출 일자
 

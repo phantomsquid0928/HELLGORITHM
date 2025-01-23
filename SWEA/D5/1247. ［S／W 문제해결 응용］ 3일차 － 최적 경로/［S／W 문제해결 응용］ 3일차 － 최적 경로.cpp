@@ -3,61 +3,54 @@
 using namespace std;
 
 vector<array<int, 2>> dots;
-int graph[11][11] = {};
-int sel[11] = {};
 
+int visited[15];
+
+int mincost = 0x3f3f3f3f;
+int n = -1;
+void dfs(int cur, int cost, int cnt) {
+	if (cnt == n) {
+		array<int, 2> final = dots[1];
+		array<int, 2> curpoint = dots[cur];
+		
+		int finalcost = abs(curpoint[0] - final[0]) + abs(curpoint[1] - final[1]);
+		
+		mincost = min(mincost, cost + finalcost);
+		return;
+	}
+	if (cost > mincost) return;
+	array<int, 2> curpoint = dots[cur];
+	
+	for (int i = 2; i < n + 2; i++) {
+		if (visited[i]) continue;
+		visited[i] = 1;
+		
+		array<int, 2> nextpoint = dots[i];
+		int ncost = abs(curpoint[0] - nextpoint[0]) + abs(curpoint[1] - nextpoint[1]);
+		
+		dfs(i, cost + ncost, cnt + 1);
+		visited[i] = 0;
+	}
+}
 int main() {
 	int t;
+	
 	cin >> t;
-	for (int tt = 1; tt <= t; tt++){
-		int n;
+	
+	for (int tt = 1; tt <= t; tt++) {
 		cin >> n;
 		
-//		cout << n << endl;
-		
-		memset(sel, 0, sizeof(sel));
-		memset(graph, 0, sizeof(graph));
+		mincost = 0x3f3f3f3f;
+		memset(visited, 0, sizeof(visited));
 		dots.clear();
 		
-		for (int i = 0; i < n; i++) {
-			sel[i] = i + 2;
-		}
-		//company always 0 my home always n + 1;
-		
-		for (int i = 0;i < n + 2; i++) {
+		for (int i = 0; i < n + 2; i++ ){
 			int a, b;
 			cin >> a >> b;
-			
 			dots.push_back({a, b});
 		}
 		
-		int mincost = 0x3f3f3f3f;
-		do {
-			int cost = 0;
-			int now = 0;
-			int fin = 1;
-			
-//			cout << now << " ";
-			for (int i = 0;i < n; i++) {
-//				cout << sel[i] << " ";
-				auto cur = dots[now];
-				auto next = dots[sel[i]];
-				
-				int dist = abs(cur[0] - next[0]) + abs(cur[1] - next[1]);
-				cost += dist;
-				
-				now = sel[i];
-			}
-//			cout << fin << endl;
-			
-			auto cur = dots[now];
-			auto next = dots[fin];
-			
-			int dist = abs(cur[0] - next[0]) + abs(cur[1] - next[1]);
-			cost += dist;
-			
-			mincost = min(cost, mincost);
-		} while (next_permutation(sel, sel + n));
+		dfs(0, 0, 0);
 		
 		cout << "#" << tt << " " << mincost << endl;
 	}

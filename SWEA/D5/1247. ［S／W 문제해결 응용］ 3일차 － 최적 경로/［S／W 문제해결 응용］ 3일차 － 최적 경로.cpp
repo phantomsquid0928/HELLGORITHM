@@ -4,53 +4,59 @@ using namespace std;
 
 vector<array<int, 2>> dots;
 
-int visited[15];
+queue<array<int, 4>> q; // 4 for hist
 
-int mincost = 0x3f3f3f3f;
-int n = -1;
-void dfs(int cur, int cost, int cnt) {
-	if (cnt == n) {
-		array<int, 2> final = dots[1];
-		array<int, 2> curpoint = dots[cur];
-		
-		int finalcost = abs(curpoint[0] - final[0]) + abs(curpoint[1] - final[1]);
-		
-		mincost = min(mincost, cost + finalcost);
-		return;
-	}
-	if (cost > mincost) return;
-	array<int, 2> curpoint = dots[cur];
-	
-	for (int i = 2; i < n + 2; i++) {
-		if (visited[i]) continue;
-		visited[i] = 1;
-		
-		array<int, 2> nextpoint = dots[i];
-		int ncost = abs(curpoint[0] - nextpoint[0]) + abs(curpoint[1] - nextpoint[1]);
-		
-		dfs(i, cost + ncost, cnt + 1);
-		visited[i] = 0;
-	}
-}
+
 int main() {
-	int t;
 	
+	int t;
 	cin >> t;
 	
 	for (int tt = 1; tt <= t; tt++) {
+		int n;
 		cin >> n;
 		
-		mincost = 0x3f3f3f3f;
-		memset(visited, 0, sizeof(visited));
 		dots.clear();
-		
-		for (int i = 0; i < n + 2; i++ ){
-			int a, b;
+		for (int i =0 ;i <n + 2 ; i++) {
+			int a,b ;
 			cin >> a >> b;
 			dots.push_back({a, b});
 		}
 		
-		dfs(0, 0, 0);
+//		q.clear();
+		
+		q.push({0, 0, 0, 0}); //start always 0
+		
+		int mincost = 0x3f3f3f3f;
+		
+		
+		while(!q.empty()) {
+			auto temp = q.front(); q.pop();
+			
+			int cur = temp[0];
+			int cost = temp[1];
+			int level = temp[2];
+			int hist = temp[3];
+			
+//			cout << cur << " " <<  cost << " " <<level << " " << hist << endl;
+			
+			if (cost > mincost) continue;
+			if (level == n) { //visited all
+				int finalcost = abs(dots[cur][0] - dots[1][0]) + abs(dots[cur][1] - dots[1][1]);
+				mincost = min(mincost, cost + finalcost);
+				continue;
+			}
+			
+			for (int i = 2; i < n + 2; i++) {
+				if ((hist & (1 << (i - 2))) != 0) continue;
+				
+				int temp = hist;
+				temp |= (1 << (i - 2));
+				
+				int ncost = abs(dots[i][0] - dots[cur][0]) + abs(dots[i][1] - dots[cur][1]);
+				q.push({i, cost + ncost, level + 1, temp});
+			}
+		}
 		
 		cout << "#" << tt << " " << mincost << endl;
 	}

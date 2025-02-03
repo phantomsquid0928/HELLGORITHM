@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#define endl '\n'
 
 using namespace std;
 int union_find[1000002];
@@ -13,18 +14,19 @@ void _union(int a, int b) {
 	int t = find(a);
 	int tt = find(b);
 	
-	if (t == tt) return;
-	
-	if (ranks[t] > ranks[tt]) {
-		union_find[tt] = t;
-	}
-	else if (ranks[t] < ranks[tt]) {
-		union_find[t] = tt;
-	}
-	else {
-		union_find[tt] = t;
-		ranks[t]++;
-	}
+	union_find[t] = tt;
+//	if (t == tt) return;
+//	
+//	if (ranks[t] > ranks[tt]) {
+//		union_find[tt] = t;
+//	}
+//	else if (ranks[t] < ranks[tt]) {
+//		union_find[t] = tt;
+//	}
+//	else {
+//		union_find[tt] = t;
+//		ranks[t]++;
+//	}
 }
 int main() {
 	int n, m;
@@ -46,8 +48,8 @@ int main() {
 			_union(b + 1, c + 1);
 		}
 		if (a == 1) {
-			if (find(b + 1) == find(c + 1)) cout << "YES" << '\n';
-			else cout << "NO" << '\n';
+			if (find(b + 1) == find(c + 1)) cout << "YES" << endl;
+			else cout << "NO" << endl;
 		}
 	}
 }

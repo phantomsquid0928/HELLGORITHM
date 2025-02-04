@@ -5,7 +5,7 @@ using namespace std;
 
 vector<int> arr;
 int chk[2001];
-map<ll, int> m;
+unordered_map<int, int> m;
 
 int main() {
 	int n;

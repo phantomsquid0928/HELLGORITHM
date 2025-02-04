@@ -2,24 +2,32 @@
 
 using namespace std;
 
-priority_queue<array<int, 2>> pq; //value, burntime
+vector<int> arr;
+
+priority_queue<array<int, 2>> pq;
+
 int main() {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
 	int n, l;
+	cin.tie(0);
+	ios::sync_with_stdio(0);
+	
 	cin >> n >> l;
-	for (int i =0 ;i < n; i++) {
-		int t;
-		cin >> t;
-		pq.push({-t, i});
-		int val = -pq.top()[0];
-		int burn = pq.top()[1];
-		while(i - burn >= l) {
+	
+	for (int i = 0; i < n; i++) {
+		int in;
+		cin >> in;
+		
+		pq.push({-in, i});
+		
+		while (1){
+			auto a = pq.top();
+			if (i - a[1] <l) break;
 			pq.pop();
-			val = -pq.top()[0];
-			burn = pq.top()[1];
 		}
-		cout << val << " ";
+		
+		auto a = pq.top();
+		cout << -a[0] << " ";
 	}
+	
+	
 }

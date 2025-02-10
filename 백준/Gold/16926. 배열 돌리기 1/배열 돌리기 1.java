@@ -29,8 +29,14 @@ public class Main {
 			K = M;
 		}
 		
-		for (int r = 0; r < R; r++) {
-			for (int k = 0; k < K / 2; k++) {
+		
+		int curR = R;
+		int l = 1;
+		
+		for (int k = 0; k < K / 2; k++) {
+			l = ((N-(2*k+1))+(M-(2*k+1)))*2;
+			curR = R % l;
+			for (int r = 0; r < curR; r++) {
 				int temp2 = arr[N-1-k][k];
 				int temp3 = arr[N-1-k][M-1-k];
 				int temp4 = arr[k][M-1-k];

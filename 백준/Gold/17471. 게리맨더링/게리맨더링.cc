@@ -2,112 +2,107 @@
 
 using namespace std;
 
-int pop[11];
-int sel[11];
-
 vector<int> graph[11];
+int pop[11];
 
-bool check(int n, int start) {
-	int color = sel[start];
+bool test(int start, int * group, int n, int mod) {
+	queue<int> q;
+	
+	q.push(start);
 	
 	int visited[11] = {};
-	
-	queue<int> q;
-	q.push(start);
+	visited[start] = 1;
 	
 	while(!q.empty()) {
 		int cur = q.front(); q.pop();
 		
-		if (visited[cur]) continue;
-		visited[cur] = 1;
-		
-		
-		for (int n : graph[cur]) {
+		for (auto &n : graph[cur]) {
+			if (group[n] != group[cur]) continue;
 			if (visited[n]) continue;
-			if (sel[n] != color) continue;
+			visited[n] = 1;
 			q.push(n);
 		}
 	}
 	
-//	cout << " visited" << endl;
-//	for (int i = 1; i <= n ;i++) {
-//		cout << visited[i] << " ";
-//	}
-//	cout << endl;
-	
-	bool valid = true;
 	for (int i = 1; i <= n; i++) {
-		if ((sel[i] == color) && !visited[i]) valid = false;
+		if (mod && group[i] && !visited[i]) return false;
+		if (!mod && !group[i] && !visited[i]) return false;
 	}
-	if (!valid) return false;
 	return true;
 }
-
 int main() {
 	int n;
 	cin >> n;
 	
-	for (int i =1  ;i <= n; i++) {
-		cin >> pop[i];
-	}
+	int arr[11] = {};
 	
-	for (int i = 1; i <= n; i++ ){
+	for (int i = 0; i < n; i++){ 
+		cin >> pop[i + 1];
+	}
+	for (int i = 0; i< n; i++) {
 		int t;
 		cin >> t;
+		
+		arr[i] = i + 1;
 		for (int j = 0; j < t; j++) {
-			int u;
-			cin >> u;
-			graph[i].push_back(u);
-			graph[u].push_back(i);
+			int in;
+			cin >> in;
+			
+			graph[i + 1].push_back(in);
+			graph[in].push_back(i + 1);
 		}
 	}
 	
-	int minres = 100000000;
-	bool valid_exists = false;
-	for (int i = 1; i <= (n >> 1); i++) {
-		memset(sel, 0, sizeof(sel));
-		for (int j = 1 ; j <= i; j++) {
+	queue<int> q;
+	
+	int groupnums[11];
+	int minres = 0x3f3f3f3f;
+	for (int i = 1; i <= n / 2; i++) {
+		int sel[11] = {};
+		for (int j = 0; j < i; j++) {
 			sel[j] = 1;
 		}
+		
+		
 		do {
-			bool valid = false;
-			//con check
+			memset(groupnums, 0, sizeof(groupnums));
+			int startg1 = -1;
+			int startg2 = -1;
 			
-//			for (int k = 0; k <= n; k++) {
-//				cout << sel[k] << " ";
-//			}
-//			cout << endl;
-			valid = check(n, 1);
-			
-//			cout << "vlid : "<<    valid << endl;
-			int other = -1;
-			
-			for (int k = 1; k <= n; k++) {
-				if (sel[1] != sel[k]) {
-					other = k;
-					break;
+			int num = 0;
+			int num2 = 0;
+			for (int i = 0; i < n; i++) {
+				if (sel[i]) {
+//					cout << arr[i] << " ";
+					groupnums[arr[i]] = 1;
+					startg1 = arr[i];
+					num += pop[arr[i]];
+				}
+				else {
+					startg2 = arr[i];
+					num2 += pop[arr[i]];
 				}
 			}
 			
-			valid &= check(n, other);
+//			for (int i = 1; i<=n ;i++) {
+//				cout << groupnums[i];
+//			}
+//			cout << endl;
+//			cout << endl;
 			
-			//calc diff
-			if (!valid) continue;
-			valid_exists = true;
-			int asum = 0;
-			int bsum = 0;
+			//test linkage...
 			
-			for (int k = 1; k <= n; k++) {
-				if (sel[k]) asum += pop[k];
-				else bsum += pop[k];
+			bool res = test(startg1, groupnums, n, 1);
+			bool res2 = test(startg2, groupnums, n, 0);
+			
+			if (res && res2) {
+				minres = min(minres, abs(num - num2));
 			}
-			minres = min(minres, abs(asum - bsum));
-		} while(prev_permutation(sel + 1, sel + n + 1));
+			
+//			cout << endl;
+		}while(prev_permutation(sel, sel + n));
 	}
 	
-	if (valid_exists) cout << minres << endl;
-	else cout << -1 << endl;
-	//11C1 ~ 11C5 = ??
-	
-	
+	if (minres == 0x3f3f3f3f) cout << -1 << endl;
+	else cout << minres << endl;
 }

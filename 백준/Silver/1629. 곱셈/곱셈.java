@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.*;
-import java.math.BigInteger;
 
 public class Main {
 
@@ -17,10 +16,10 @@ public class Main {
 
         if (b % 2 == 0) {
             x = calc(a, b / 2, c);
-            return (x * x) % c;
+            return x * x % c;
         } else {
-            x = calc(a, (b - 1) / 2, c);
-            return (x * x * a) % c;
+            x = calc(a, b / 2, c);
+            return x * x % c * a % c;
         }
     }
 
@@ -32,12 +31,6 @@ public class Main {
         int B = Integer.parseInt(st.nextToken());
         int C = Integer.parseInt(st.nextToken());
 
-        // System.out.println(calc(A, B, C));
-
-        BigInteger AA = BigInteger.valueOf(A);
-        BigInteger BB = BigInteger.valueOf(B);
-        BigInteger CC = BigInteger.valueOf(C);
-
-        System.out.println(AA.modPow(BB, CC));
+        System.out.println(calc(A, B, C));
     }
 }

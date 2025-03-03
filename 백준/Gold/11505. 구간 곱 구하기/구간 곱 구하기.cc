@@ -47,6 +47,8 @@ ll query(int l, int r, int node = 0, int s = 0, int e = sz - 1) {
 
 
 int main( ){
+	cin.tie(0);
+	ios::sync_with_stdio(0);
 	int n, m, k;
 	
 	cin >> n >> m >> k;

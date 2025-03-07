@@ -20,7 +20,7 @@ int used = 1;
 //unordered_map<int, int> info;
 vector<ll> arr;
 
-void update(ll idx, int val, int node = 0, ll s = 0, ll e = 10e17 + 4) {
+void update(ll idx, int val, int node = 0, ll s = 0, ll e = 10e17) {
 	if (idx < s || idx > e) return;
 	if (s == e) {
 		tree[node].val += val;
@@ -41,7 +41,7 @@ void update(ll idx, int val, int node = 0, ll s = 0, ll e = 10e17 + 4) {
 	tree[node].val = a + b;
 }
 
-ll query(ll l, ll r, int node = 0, ll s = 0, ll e = 10e17 + 4) {
+ll query(ll l, ll r, int node = 0, ll s = 0, ll e = 10e17) {
 	if (node == -1) return 0;
 	if (s > r || e < l) return 0;
 	if (l <= s && e <= r) return tree[node].val;
@@ -50,15 +50,15 @@ ll query(ll l, ll r, int node = 0, ll s = 0, ll e = 10e17 + 4) {
 	return query(l, r, tree[node].l, s, m) + query(l, r, tree[node].r, m + 1, e);
 }
 
-ll query2(ll k, int node=0, ll s = 0, ll e = 10e17 + 4) {
+ll query2(ll k, int node=0, ll s = 0, ll e = 10e17) {
 	if (node == -1) return 0;
 	if (s == e) return s;
 	ll m = s + e >> 1;
-//	if (tree[node].l != -1) {
+	if (tree[node].l != -1) {
 		if (tree[tree[node].l].val < k) return query2(k - tree[tree[node].l].val, tree[node].r, m + 1, e);
 		return query2(k, tree[node].l, s, m);
-//	}
-//	return query2(k, tree[node].r, m + 1, e);
+	}
+	return query2(k, tree[node].r, m + 1, e);
 }
 
 int main() {
@@ -104,7 +104,7 @@ int main() {
 		}if (in == 4) {
 			int t;
 			cin >> t;
-			cout << query2(n - t + 1) << endl;
+			cout << query2(arr.size() - t) << endl;
 		}
 	}
 }

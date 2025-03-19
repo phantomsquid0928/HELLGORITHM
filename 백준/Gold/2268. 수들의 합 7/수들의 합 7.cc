@@ -1,43 +1,41 @@
 #include <bits/stdc++.h>
 #define ll long long
 #define endl '\n'
-
 using namespace std;
 
-
-constexpr int sz = 1 << 20; // 원소개수수보다 큰 2의 배수중 최소ㅗ
+// sz : n보다 크거나 같은 2^k 인 수
+// 13만 -> 1 << 17 (131072) 100만 -> 1 << 20 (1048576)
+constexpr int sz = 1 << 20; // 100만
 constexpr int treesz = sz << 1;
-int n;
 
 ll tree[treesz];
 
-void init(int node, int s, int e) {
+void update(int idx, ll v) { 
+    //+= sz - 1 for [1, sz] idx, += sz for [0, sz - 1]
+    idx += sz - 1, tree[idx] = v;
+    while(idx /= 2) tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+}
 
+ll query(int l, int r) {
+    ll res = 0;
+    for (l += sz - 1, r += sz - 1; l <= r; l /= 2, r /= 2) {
+        if (l % 2 == 1) res += tree[l++];
+        if (r % 2 == 0) res += tree[r--];
+    }
+    return res;
 }
-ll update(int idx, int val, int node = 1, int s = 1, int e = sz) {
-    if (idx < s || idx > e) return tree[node];
-    if (idx == s && idx == e) return tree[node] = val;//?
-    if (s == e) return tree[node];
-    int mid = s + e >> 1;
-    return tree[node] = update(idx, val, node * 2, s, mid) + update(idx, val, node * 2 + 1, mid + 1, e);
-}
-ll query(int l, int r, int node = 1, int s = 1, int e = sz) {
-    if (s > r || e < l) return 0;
-    if (l <= s && e <= r) return tree[node];
-    int mid = s + e >> 1;
-    return query(l, r, node * 2, s, mid) + query(l, r, node * 2 + 1, mid + 1, e);
-}
+
 int main() {
-    int m;
+    int n, m;
     cin.tie(0);
     ios::sync_with_stdio(0);
-    cin >> n >> m;
+    cin>>n >> m;
 
-
-    for (int i =0 ; i< m; i++) {
+    for (int i= 0 ;i < m; i++) {
         int a, b, c;
 
-        cin >> a >> b >> c;
+        cin >> a >> b >>c;
+
         if (a == 0) {
             int bb = min(b, c);
             int cc = max(b, c);
@@ -47,6 +45,5 @@ int main() {
         else {
             update(b, (ll)c);
         }
-
     }
 }
